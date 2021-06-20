@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 */
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 
@@ -29,7 +29,7 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('home');
-        
+
         Route::resource('posts', 'PostController');
     });
 
