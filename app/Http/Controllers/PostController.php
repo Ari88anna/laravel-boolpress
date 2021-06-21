@@ -20,7 +20,7 @@ class PostController extends Controller
 
     public function show($slug) {
 
-        $post = Post::where('slug', '=', $slug)->first();
+        $post = Post::where('slug', '=', $slug)->first(); // ->first() torna il primo elemento e non la collection
 
         if(!$post) {
             abort('404');

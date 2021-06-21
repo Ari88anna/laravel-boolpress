@@ -15,7 +15,7 @@
 
                           <h5 class="card-title">{{ ucfirst($post->title) }}</h5>
                           
-                          <a href="#" class="btn btn-primary">Vai al post</a>
+                          <a href="{{route('admin.posts.show', ['post' =>$post->id] )}}" class="btn btn-primary">Vai al post</a>                          
 
                         </div>
                     </div>
@@ -25,6 +25,9 @@
             @endforeach
             
         </div>
+
+        
     </div>
     
+    </div>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Post;
 
 class PostController extends Controller
@@ -31,7 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -42,8 +43,44 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+
+        //Validazione
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required|max: 65000'
+        ]);
+
+        $new_post_data = $request->all();
+       
+
+        // Gestione slug
+        $new_slug = Str::slug($new_post_data['title'], '-');
+        
+        $base_slug = $new_slug;
+        //Controlliamo che non esista un post con questo slug
+        $post_with_existing_slug = Post::where('slug', '=', $new_slug)->first();
+        $counter = 1;
+
+        //Se esiste tento con altri slug
+        while($post_with_existing_slug) {
+            //Provo un nuovo slug appendendo il counter
+            $new_slug = $base_slug . '-' . $counter ; 
+            $counter++ ;
+
+            //Se anche il nuovo slug esiste nel database, il ciclo while continua
+            $post_with_existing_slug = Post::where('slug', '=', $new_slug)->first();
+        }
+
+        //Quando troviamo uno slug libero, popoliamo i data da salvare
+        $new_post_data['slug'] = $new_slug;
+
+        $new_post = new Post();
+        $new_post -> fill($new_post_data);        
+        $new_post -> save();
+
+        return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
+     }
 
     /**
      * Display the specified resource.
@@ -53,7 +90,13 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        $data = [
+            'post'=>$post
+        ];
+
+        return view('admin.posts.show', $data);
     }
 
     /**
