@@ -107,7 +107,13 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        $data = [
+            'post' => $post
+        ];
+
+        return view('admin.posts.edit', $data);
     }
 
     /**
@@ -119,7 +125,49 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required|max: 65000'
+        ]);
+
+       $edit_post_data = $request->all();
+
+       $post = Post::findOrFail($id);
+        //Di default lo slug non dovrebbe essere cambiato a meno che cambi il titolo del post
+       $edit_post_data['slug'] = $post->slug; 
+
+
+        //Ricalcolo il nuovo slug solo se il  titolo del post nuovo è diverso da quello precedente
+        if($edit_post_data['title'] != $post->title) {
+           // Gestione slug
+            $new_slug = Str::slug($edit_post_data['title'], '-');
+                
+            $base_slug = $new_slug;
+            //Controlliamo che non esista un post con questo slug
+            $post_with_existing_slug = Post::where('slug', '=', $new_slug)->first();
+            $counter = 1;
+
+            //Se esiste tento con altri slug
+            while($post_with_existing_slug) {
+                //Provo un nuovo slug appendendo il counter
+                $new_slug = $base_slug . '-' . $counter ; 
+                $counter++ ;
+
+                //Se anche il nuovo slug esiste nel database, il ciclo while continua
+                $post_with_existing_slug = Post::where('slug', '=', $new_slug)->first();
+            }
+
+            //Quando troviamo uno slug libero, popoliamo i data da salvare
+            $edit_post_data['slug'] = $new_slug;
+        }
+       
+       
+       $post->update($edit_post_data);
+
+        return redirect()->route('admin.posts.show', ['post' => $post->id]);
+
+
     }
 
     /**

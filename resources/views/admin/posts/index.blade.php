@@ -15,7 +15,9 @@
 
                           <h5 class="card-title">{{ ucfirst($post->title) }}</h5>
                           
-                          <a href="{{route('admin.posts.show', ['post' =>$post->id] )}}" class="btn btn-primary">Vai al post</a>                          
+                          <a href="{{route('admin.posts.show', ['post' =>$post->id] )}}" class="btn btn-primary">Vai al post</a>
+
+                          <a href="{{route('admin.posts.edit', ['post' =>$post->id] )}}" class="btn btn-primary">Modifica post</a>                            
 
                         </div>
                     </div>
