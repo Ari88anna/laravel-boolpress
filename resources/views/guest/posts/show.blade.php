@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>{{ $post->title }}</h1>
+        <h1>{{ ucfirst($post->title) }}</h1>
 
-        <p>{{ $post->content }}</p>
+        <p>{{ ucfirst($post->content) }}</p>
 
         
     </div>

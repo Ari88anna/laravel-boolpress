@@ -13,7 +13,9 @@
                         
                         <div class="card-body">
                             
-                          <h5 class="card-title">{{ $post->title }}</h5>
+                          <h5 class="card-title">{{ ucfirst($post->title) }}</h5>
+
+                          <p>{{ Str::words($post->content, 20) }}</p>
                           
                           <a href="{{ route('blog-page', ['slug'=>$post->slug]) }}" class="btn btn-primary">Leggi il post</a>
 

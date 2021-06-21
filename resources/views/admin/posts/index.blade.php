@@ -13,7 +13,7 @@
                         
                         <div class="card-body">
 
-                          <h5 class="card-title">{{ $post->title }}</h5>
+                          <h5 class="card-title">{{ ucfirst($post->title) }}</h5>
                           
                           <a href="#" class="btn btn-primary">Vai al post</a>
 
