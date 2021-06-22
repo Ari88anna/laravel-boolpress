@@ -4,7 +4,7 @@
     <div class="container">
        <h1>Modifica post</h1>
 
-       {{-- @if ($errors->any())
+       @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
@@ -12,7 +12,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif --}}
+        @endif
 
        <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post">
         @csrf
