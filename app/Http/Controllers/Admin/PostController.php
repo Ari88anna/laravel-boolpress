@@ -93,7 +93,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $data = [
-            'post'=>$post
+            'post'=>$post            
         ];
 
         return view('admin.posts.show', $data);
