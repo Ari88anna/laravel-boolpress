@@ -19,12 +19,30 @@
         @method('POST')
 
         <div class="form-group">
-
             <label for="title">Titolo</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+        </div>
 
+        <div class="form-group">
             <label for="content">Contenuto</label>           
             <textarea class="form-control" name="content" id="content" cols="30" rows="10" value="{{ old('content') }}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category_id">Categoria</label>
+
+            <select class="form-control" name="category_id" id="category_id">
+                <option value="">Nessuna</option>
+
+                @foreach($categories as $category)
+
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+
+                @endforeach
+
+            </select>
+
+        </div>                   
 
 
             <input type="submit" class="btn btn-outline-success" value="Salva post">
