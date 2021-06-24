@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Category;
 use App\Post;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -34,9 +35,11 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();        
 
         $data = [
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags
         ];
 
 
@@ -57,11 +60,12 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|max:255',
             'content' => 'required|max: 65000',
-            'category_id'=> 'nullable|exists:categories,id'
+            'category_id'=> 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id'
         ]);
 
-        $new_post_data = $request->all();
-       
+        $new_post_data = $request->all();       
+        
 
         // Gestione slug
         $new_slug = Str::slug($new_post_data['title'], '-');
@@ -88,6 +92,11 @@ class PostController extends Controller
         $new_post -> fill($new_post_data);        
         $new_post -> save();
 
+        if(isset($new_post_data['tags']) && is_array($new_post_data['tags'])) {
+            $new_post ->tags()->sync($new_post_data['tags']);
+        }
+        
+
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
      }
 
@@ -103,7 +112,8 @@ class PostController extends Controller
 
         $data = [
             'post'=>$post,
-            'post_category' => $post->category           
+            'post_category' => $post->category ,
+            'post_tags' => $post->tags          
         ];
 
         return view('admin.posts.show', $data);

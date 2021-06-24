@@ -25,7 +25,7 @@
 
         <div class="form-group">
             <label for="content">Contenuto</label>           
-            <textarea class="form-control" name="content" id="content" cols="30" rows="10" value="{{ old('content') }}"></textarea>
+            <textarea class="form-control" name="content" id="content" cols="30" rows="10" >{{ old('content') }}</textarea>
         </div>
 
         <div class="form-group">
@@ -42,7 +42,19 @@
 
             </select>
 
-        </div>                   
+        </div>    
+
+        @foreach ($tags as $tag)
+
+            <div class="form-check">            
+                <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"  {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
+                <label class="form-check-label" for="tag-{{ $tag->id }}">
+                    {{$tag->name}}
+                </label>
+            </div>
+            
+        @endforeach
+        
 
 
             <input type="submit" class="btn btn-outline-success" value="Salva post">
