@@ -27,7 +27,8 @@ class CategoryController extends Controller
         }
 
         $data = [
-            'category' => $category
+            'category' => $category,
+            'related_post' => $category->posts
         ];
 
         return view('guest.categories.show', $data);
