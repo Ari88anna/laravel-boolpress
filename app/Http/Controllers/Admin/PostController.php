@@ -129,10 +129,12 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $categories = Category::all();
+        $tags = Tag::all();
 
         $data = [
             'post' => $post,
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags
         ];
 
         return view('admin.posts.edit', $data);
@@ -151,7 +153,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|max:255',
             'content' => 'required|max: 65000',
-            'category_id'=> 'nullable|exists:categories,id'
+            'category_id'=> 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id'
         ]);
 
        $edit_post_data = $request->all();
@@ -187,6 +190,17 @@ class PostController extends Controller
        
        
        $post->update($edit_post_data);
+
+       if(isset($edit_post_data['tags']) && is_array($edit_post_data['tags'])) {
+
+            $post->tags()->sync($edit_post_data['tags']);
+
+       } else {
+
+            $post->tags()->sync([]);
+
+       }
+       
 
         return redirect()->route('admin.posts.show', ['post' => $post->id]);
 
