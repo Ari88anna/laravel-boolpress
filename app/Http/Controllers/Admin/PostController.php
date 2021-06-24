@@ -191,16 +191,11 @@ class PostController extends Controller
        
        $post->update($edit_post_data);
 
-       if(isset($edit_post_data['tags']) && is_array($edit_post_data['tags'])) {
-
+        if(isset($edit_post_data['tags']) && is_array($edit_post_data['tags'])) {
             $post->tags()->sync($edit_post_data['tags']);
-
-       } else {
-
+        } else {
             $post->tags()->sync([]);
-
-       }
-       
+        }       
 
         return redirect()->route('admin.posts.show', ['post' => $post->id]);
 
@@ -216,7 +211,12 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        // prima di cancellare il post svuoto le relazioni con la tabella ponte
+        $post -> tags()->sync([]);
+
         $post -> delete();
+
+        
 
         return redirect()->route('admin.posts.index');
     }
