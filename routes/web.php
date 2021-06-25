@@ -30,6 +30,9 @@ Route::get('/blog/{slug}', 'PostController@show')->name('blog-page');
 Route::get('/categories', 'CategoryController@index')->name('categories');
 Route::get('/categories/{slug}', 'CategoryController@show')->name('category-page');
 
+Route::get('/posts', 'Api\PostController@index')->name('api.posts');
+Route::get('/vue-posts', 'PostController@vuePosts')->name('vue-posts');
+
 
 Route::prefix('admin')
     ->namespace('Admin')
