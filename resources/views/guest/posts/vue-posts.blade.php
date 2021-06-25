@@ -31,7 +31,7 @@
                             
                           <h5 class="card-title">@{{ post.title }}</h5>
 
-                          <p>@{{ post.content}}</p>
+                          <p>@{{ post.content.substring(0, 100)}}...</p>
                           
                           
 
