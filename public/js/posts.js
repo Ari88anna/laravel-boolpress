@@ -2114,8 +2114,7 @@ var app = new Vue({
     var _this = this;
 
     axios.get('http://127.0.0.1:8000/posts').then(function (result) {
-      _this.posts = result.data.posts;
-      console.log(_this.posts);
+      _this.posts = result.data.posts; // console.log(this.posts)
     });
   }
 });

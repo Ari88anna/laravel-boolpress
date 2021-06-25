@@ -22,9 +22,26 @@
             <h1>@{{ title }}</h1>
 
             <div class="row">
+
+                <div v-for="post in posts" class="col-4">
+
+                    <div class="card" style="width: 18rem;">
+                        
+                        <div class="card-body">
+                            
+                          <h5 class="card-title">@{{ post.title }}</h5>
+
+                          <p>@{{ post.content}}</p>
+                          
+                          
+
+                        </div>
+                    </div>
+
+                </div>
             
 
-        </div>
+            </div>
         
             
         </div>
