@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Category;
 use App\Post;
 use App\Tag;
@@ -64,7 +65,9 @@ class PostController extends Controller
             'tags' => 'nullable|exists:tags,id'
         ]);
 
-        $new_post_data = $request->all();       
+        $new_post_data = $request->all(); 
+        
+          
         
 
         // Gestione slug
@@ -87,6 +90,16 @@ class PostController extends Controller
 
         //Quando troviamo uno slug libero, popoliamo i data da salvare
         $new_post_data['slug'] = $new_slug;
+
+        //Se c'è un'img caricata dall'utente la salvo in storage 
+        //e aggiungo il èath relativo a cover in $new_post_data  
+
+        if(isset($new_post_data['cover-image'])) {
+            //put()ha bisogno di 2 argomenti: 1-la sottocartella in cui salvare il file 2-il file da salvare
+            $new_img_path = Storage::put('posts-cover', $new_post_data['cover-image'] );
+            dd($new_img_path );
+            
+        }
 
         $new_post = new Post();
         $new_post -> fill($new_post_data);        

@@ -14,55 +14,62 @@
             </div>
         @endif
 
-       <form action="{{ route('admin.posts.store') }}" method="post">
-        @csrf
-        @method('POST')
+        <form action="{{ route('admin.posts.store') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
 
-        <div class="form-group">
-            <label for="title">Titolo</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
-        </div>
+            <div class="form-group">
+                <label for="title">Titolo</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+            </div>
 
-        <div class="form-group">
-            <label for="content">Contenuto</label>           
-            <textarea class="form-control" name="content" id="content" cols="30" rows="10" >{{ old('content') }}</textarea>
-        </div>
+            <div class="form-group">
+                <label for="content">Contenuto</label>           
+                <textarea class="form-control" name="content" id="content" cols="30" rows="10" >{{ old('content') }}</textarea>
+            </div>
 
-        <div class="form-group">
-            <label for="category_id">Categoria</label>
+            <div class="form-group">
+                <label for="category_id">Categoria</label>
 
-            <select class="form-control" name="category_id" id="category_id">
-                <option value="">Nessuna</option>
+                <select class="form-control" name="category_id" id="category_id">
+                    <option value="">Nessuna</option>
 
-                @foreach($categories as $category)
+                    @foreach($categories as $category)
 
-                    <option value="{{ $category->id }}"  {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        <option value="{{ $category->id }}"  {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
 
-                @endforeach
+                    @endforeach
 
-            </select>
+                </select>
 
-        </div>    
+            </div>    
 
-        @foreach ($tags as $tag)
+            @foreach ($tags as $tag)
 
-            <div class="form-check">            
-                <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"  {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
-                <label class="form-check-label" for="tag-{{ $tag->id }}">
-                    {{$tag->name}}
-                </label>
+                <div class="form-check">            
+                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"  {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="tag-{{ $tag->id }}">
+                        {{$tag->name}}
+                    </label>
+                </div>
+                
+            @endforeach
+
+
+            
+            <div class="form-group">
+                <label for="cover-image">Carica Immagine di copertina</label>
+                <input type="file" class="form-control-file" name="cover-image" id="cover-image">
             </div>
             
-        @endforeach
-        
 
 
             <input type="submit" class="btn btn-outline-success" value="Salva post">
-        </div>
+            
 
 
 
-       </form>
+        </form>
 
         
     </div>
