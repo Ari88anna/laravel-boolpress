@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewPostNotification;
 use App\Category;
 use App\Post;
 use App\Tag;
@@ -112,7 +114,10 @@ class PostController extends Controller
         if(isset($new_post_data['tags']) && is_array($new_post_data['tags'])) {
             $new_post ->tags()->sync($new_post_data['tags']);
         }
-        
+
+        //Invio email
+
+        Mail::to('arianna@gmail.com')->send(new NewPostNotification($new_post));
 
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
      }
