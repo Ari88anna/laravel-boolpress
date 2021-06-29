@@ -19,6 +19,12 @@
         <h1>{{ ucfirst($post->title) }}</h1>
 
         <p>Slug: {{ $post->slug }}</p>
+
+        @if($post->cover)
+
+            <img src="{{  asset('storage/'. $post->cover) }}" alt="{{ $post->title }}">
+
+        @endif
         
 
         <p>{{ ucfirst($post->content) }}</p>

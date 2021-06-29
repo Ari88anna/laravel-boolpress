@@ -14,69 +14,85 @@
             </div>
         @endif
 
-       <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post">
-        @csrf
-        @method('PUT')
+        <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <label for="title">Titolo</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}">
-            
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="content">Contenuto</label>           
-            <textarea class="form-control" name="content" id="content" cols="30" rows="10">{{ old('content', $post->content) }}</textarea>
-
-        </div>
-
-            
-        <div class="form-group">
-
-            <label for="category_id">Categoria</label>
-
-            <select class="form-control" name="category_id" id="category_id">
-                <option value="">Nessuna</option>
-
-                @foreach($categories as $category)
-
-                    <option value="{{ $category->id }}"  {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-
-                @endforeach
-
-            </select>
-
-        </div>
-
-
-        @foreach ($tags as $tag)
-
-            <div class="form-check">   
-                @if ($errors->any())
+                <label for="title">Titolo</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}">
                 
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"  {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>         
-                    
-                @else
-                    <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}" {{ $post->tags->contains($tag->id) ? 'checked': '' }}>
-                @endif
-
-                <label class="form-check-label" for="tag-{{ $tag->id }}">
-                    {{$tag->name}}
-                </label>
             </div>
+
+
+            <div class="form-group">
+
+                <label for="content">Contenuto</label>           
+                <textarea class="form-control" name="content" id="content" cols="30" rows="10">{{ old('content', $post->content) }}</textarea>
+
+            </div>
+
+                
+            <div class="form-group">
+
+                <label for="category_id">Categoria</label>
+
+                <select class="form-control" name="category_id" id="category_id">
+                    <option value="">Nessuna</option>
+
+                    @foreach($categories as $category)
+
+                        <option value="{{ $category->id }}"  {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+
+            @foreach ($tags as $tag)
+
+                <div class="form-check">   
+                    @if ($errors->any())
+                    
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"  {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>         
+                        
+                    @else
+                        <input class="form-check-input" name="tags[]" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}" {{ $post->tags->contains($tag->id) ? 'checked': '' }}>
+                    @endif
+
+                    <label class="form-check-label" for="tag-{{ $tag->id }}">
+                        {{$tag->name}}
+                    </label>
+                </div>
+                
+            @endforeach
+
+            <div class="form-group">
+                <label for="cover-image">Carica Immagine di copertina</label>
+                <input type="file" class="form-control-file" name="cover-image" id="cover-image">
+            </div>
+
+            @if ($post->cover)
+
+            <div>
+                <h3>anteprima immagine corrente</h3>
+                <img src="{{  asset('storage/' . $post->cover)}}" alt="{{ $post->title }}">
+
+            </div>
+                
+            @endif
             
-        @endforeach
 
 
-            <input type="submit" class="btn btn-outline-success" value="Salva le modifiche">
-        </div>
+                <input type="submit" class="btn btn-outline-success" value="Salva le modifiche">
+            </div>
 
 
 
-       </form>
+        </form>
 
         
     </div>

@@ -62,7 +62,8 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'content' => 'required|max: 65000',
             'category_id'=> 'nullable|exists:categories,id',
-            'tags' => 'nullable|exists:tags,id'
+            'tags' => 'nullable|exists:tags,id',
+            'cover-image' => 'nullable|image'
         ]);
 
         $new_post_data = $request->all(); 
@@ -92,13 +93,16 @@ class PostController extends Controller
         $new_post_data['slug'] = $new_slug;
 
         //Se c'è un'img caricata dall'utente la salvo in storage 
-        //e aggiungo il èath relativo a cover in $new_post_data  
+        //e aggiungo il path relativo a cover in $new_post_data  
 
         if(isset($new_post_data['cover-image'])) {
             //put()ha bisogno di 2 argomenti: 1-la sottocartella in cui salvare il file 2-il file da salvare
             $new_img_path = Storage::put('posts-cover', $new_post_data['cover-image'] );
-            dd($new_img_path );
             
+            if ($new_img_path) {
+                $new_post_data['cover'] = $new_img_path;
+            }
+                        
         }
 
         $new_post = new Post();
@@ -167,7 +171,8 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'content' => 'required|max: 65000',
             'category_id'=> 'nullable|exists:categories,id',
-            'tags' => 'nullable|exists:tags,id'
+            'tags' => 'nullable|exists:tags,id',
+            'cover-image' => 'nullable|image'
         ]);
 
        $edit_post_data = $request->all();
@@ -200,10 +205,19 @@ class PostController extends Controller
             //Quando troviamo uno slug libero, popoliamo i data da salvare
             $edit_post_data['slug'] = $new_slug;
         }
-       
+
+        if(isset($edit_post_data['cover-image'])) {
+            //put()ha bisogno di 2 argomenti: 1-la sottocartella in cui salvare il file 2-il file da salvare
+            $img_path = Storage::put('posts-cover', $edit_post_data['cover-image'] );
+            
+            if ($img_path) {
+                $edit_post_data['cover'] = $img_path;
+            }                        
+        }       
        
        $post->update($edit_post_data);
 
+        //Tags
         if(isset($edit_post_data['tags']) && is_array($edit_post_data['tags'])) {
             $post->tags()->sync($edit_post_data['tags']);
         } else {
